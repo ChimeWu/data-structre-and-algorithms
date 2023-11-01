@@ -247,7 +247,7 @@ void postOrder(Node *node)
     postOrder(node->right);
     printf("%d ", node->data);
 }
-
+ 
 bool contains(Node *node, int data)
 {
     if (node == NULL)

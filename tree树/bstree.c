@@ -36,29 +36,42 @@ void add(Tree *tree, int data)
     else
     {
         Node *temp = tree->root;
-        while (true)
+        while (temp!=NULL && data!=temp->data)
         {
             if (data < temp->data)
             {
-                if (temp->left == NULL)
-                {
-                    temp->left = node;
-                    break;
-                }
                 temp = temp->left;
             }
             else
             {
-                if (temp->right == NULL)
-                {
-                    temp->right = node;
-                    break;
-                }
                 temp = temp->right;
             }
         }
+        
     }
     tree->size++;
+}
+
+//定义一个插入节点的函数，要求使用递归
+Node *insertNode(Node *node, int data)
+{
+    if (node == NULL)
+    {
+        Node *temp = (Node *)malloc(sizeof(Node));
+        temp->data = data;
+        temp->left = NULL;
+        temp->right = NULL;
+        return temp;
+    }
+    if (data < node->data)
+    {
+        node->left = insertNode(node->left, data);
+    }
+    else if (data > node->data)
+    {
+        node->right = insertNode(node->right, data);
+    }
+    return node;
 }
 
 Node *search(Tree *tree, int data)
@@ -197,6 +210,32 @@ void postOrder(Node *node)
     postOrder(node->left);
     postOrder(node->right);
     printf("%d ", node->data);
+}
+
+//层次遍历
+void levelOrder(Tree *tree)
+{
+    if (tree->root == NULL)
+    {
+        return;
+    }
+    Node *queue[tree->size];
+    int front = 0;
+    int rear = 0;
+    queue[rear++] = tree->root;
+    while (front < rear)
+    {
+        Node *node = queue[front++];
+        printf("%d ", node->data);
+        if (node->left != NULL)
+        {
+            queue[rear++] = node->left;
+        }
+        if (node->right != NULL)
+        {
+            queue[rear++] = node->right;
+        }
+    }
 }
 
 void print(Tree *tree)
