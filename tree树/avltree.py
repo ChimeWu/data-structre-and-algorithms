@@ -1,5 +1,13 @@
 #定义一个AVL树，实现了AVL树的自平衡功能，即在插入和删除节点时，自动调整树的结构，使其保持平衡
 
+class AVLTreeNode(object):
+    def __init__(self, value):
+        self.value = value
+        self.height = 0
+        self.left = None
+        self.right = None
+
+
 class AVLTree(object):
     def __init__(self):
         self._root = None
