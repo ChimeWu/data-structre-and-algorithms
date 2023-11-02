@@ -95,8 +95,50 @@ Node *search(Tree *tree, int data)
     return NULL;
 }
 
+//定义一个删除节点的函数，要求使用递归
+Node *removeNode(Node *node, int data)
+{
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    if (data < node->data)
+    {
+        node->left = removeNode(node->left, data);
+    }
+    else if (data > node->data)
+    {
+        node->right = removeNode(node->right, data);
+    }
+    else
+    {
+        if (node->left == NULL && node->right == NULL)
+        {
+            free(node);
+            return NULL;
+        }
+        else if (node->left == NULL || node->right == NULL)
+        {
+            Node *temp = node->left != NULL ? node->left : node->right;
+            free(node);
+            return temp;
+        }
+        else
+        {
+            Node *temp = node->right;
+            while (temp->left != NULL)
+            {
+                temp = temp->left;
+            }
+            node->data = temp->data;
+            node->right = removeNode(node->right, temp->data);
+        }
+    }
+    return node;
+}
+
 //定义删除节点的函数
-void removeNode(Tree *tree, Node *node)
+void removeNode1(Tree *tree, Node *node)
 {
     if (node == NULL)
     {

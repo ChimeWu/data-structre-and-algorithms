@@ -1,4 +1,4 @@
-1//构造一棵平衡二叉树，并实现插入、删除、查找、遍历等操作
+//构建一棵平衡二叉树，实现插入、删除、查找、遍历等操作
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,8 +79,9 @@ Node *insert(Node *node, int data)
         node->height = 1;
         node->left = NULL;
         node->right = NULL;
+        return node;
     }
-    else if (data < node->data)
+    if (data < node->data)
     {
         node->left = insert(node->left, data);
         if (height(node->left) - height(node->right) == 2)
@@ -112,6 +113,26 @@ Node *insert(Node *node, int data)
     }
     node->height = max(height(node->left), height(node->right)) + 1;
     return node;
+}
+
+Node *find(Node *node, int data)
+{
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    if (data < node->data)
+    {
+        return find(node->left, data);
+    }
+    else if (data > node->data)
+    {
+        return find(node->right, data);
+    }
+    else
+    {
+        return node;
+    }
 }
 
 Node *findMin(Node *node)
@@ -168,7 +189,7 @@ Node *removeNode(Node *node, int data)
     }
     else
     {
-        if (node->left != NULL && node->right != NULL)
+        if (node->left && node->right)
         {
             Node *temp = findMin(node->right);
             node->data = temp->data;
@@ -193,26 +214,6 @@ Node *removeNode(Node *node, int data)
         node->height = max(height(node->left), height(node->right)) + 1;
     }
     return node;
-}
-
-Node *find(Node *node, int data)
-{
-    if (node == NULL)
-    {
-        return NULL;
-    }
-    if (data < node->data)
-    {
-        return find(node->left, data);
-    }
-    else if (data > node->data)
-    {
-        return find(node->right, data);
-    }
-    else
-    {
-        return node;
-    }
 }
 
 void preOrder(Node *node)
@@ -247,41 +248,15 @@ void postOrder(Node *node)
     postOrder(node->right);
     printf("%d ", node->data);
 }
- 
-bool contains(Node *node, int data)
-{
-    if (node == NULL)
-    {
-        return false;
-    }
-    if (data < node->data)
-    {
-        return contains(node->left, data);
-    }
-    else if (data > node->data)
-    {
-        return contains(node->right, data);
-    }
-    else
-    {
-        return true;
-    }
-}
 
-void print(Node *node)
+void destroy(Node *node)
 {
     if (node == NULL)
     {
         return;
     }
-    printf("%d ", node->data);
-    print(node->left);
-    print(node->right);
-}
-
-void printTree(Tree *tree)
-{
-    print(tree->root);
-    printf("\n");
+    destroy(node->left);
+    destroy(node->right);
+    free(node);
 }
 
