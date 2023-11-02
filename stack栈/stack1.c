@@ -1,4 +1,5 @@
 //实现一个顺序栈及其基本操作
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,6 +12,7 @@ typedef struct stack
     int array[MAX_SIZE];
 } Stack;
 
+//创建栈
 Stack* createStack(int size)
 {
     Stack *stack = (Stack *)malloc(sizeof(Stack));

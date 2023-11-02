@@ -16,12 +16,14 @@ typedef struct stack
     int size;
 } Stack;
 
+//初始化栈
 void init(Stack *stack)
 {
     stack->top = NULL;
     stack->size = 0;
 }
 
+//入栈
 void push(Stack *stack, int data)
 {
     Node *node = (Node *)malloc(sizeof(Node));
