@@ -7,9 +7,11 @@
 #include <algorithm>
 using namespace std;
 
+//定义一个AVL树类
 template <class T>
 class AVLTree{
 private:
+    //定义AVL树的节点
     struct Node{
         T data;
         Node *left;
@@ -20,9 +22,11 @@ private:
     };
     Node *root;
     int size;
+
     int height(Node *t) const{
         return t == nullptr ? -1 : t->height;
     }
+    
     void insert(const T &x, Node *&t){
         if(t == nullptr){
             t = new Node(x);

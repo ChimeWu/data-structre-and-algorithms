@@ -78,3 +78,4 @@ mod tests {
         assert!(stack.is_empty());
     }
 }
+
