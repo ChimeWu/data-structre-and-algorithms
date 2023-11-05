@@ -1,4 +1,4 @@
-//构造一个单链表，并实现插入、删除、查找等操作
+//构造一个循环单链表，并实现其基本操作
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,47 +30,17 @@ void add(LinkedList *list, int data)
     if (list->head == NULL)
     {
         list->head = node;
+        node->next = list->head;
     }
     else
     {
         Node *temp = list->head;
-        while (temp->next != NULL)
+        while (temp->next != list->head)
         {
             temp = temp->next;
         }
         temp->next = node;
-    }
-    list->size++;
-}
-
-//采用头插法建立链表
-void addHead(LinkedList *list, int data)
-{
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->data = data;
-    node->next = list->head;
-    list->head = node;
-    list->size++;
-}
-
-//采用尾插法建立链表
-void addTail(LinkedList *list, int data)
-{
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->data = data;
-    node->next = NULL;
-    if (list->head == NULL)
-    {
-        list->head = node;
-    }
-    else
-    {
-        Node *temp = list->head;
-        while (temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = node;
+        node->next = list->head;
     }
     list->size++;
 }
@@ -89,6 +59,12 @@ void insert(LinkedList *list, int index, int data)
     {
         node->next = list->head;
         list->head = node;
+        Node *temp = list->head;
+        while (temp->next != list->head)
+        {
+            temp = temp->next;
+        }
+        temp->next = list->head;
     }
     else
     {
@@ -103,65 +79,40 @@ void insert(LinkedList *list, int index, int data)
     list->size++;
 }
 
-void delete(LinkedList *list, int index)
+bool delete(LinkedList *list, int index)
 {
     if (index < 0 || index >= list->size)
     {
         printf("index error\n");
-        return;
+        return false;
     }
-    Node *node = NULL;
+    Node *temp = list->head;
     if (index == 0)
     {
-        node = list->head;
+        while (temp->next != list->head)
+        {
+            temp = temp->next;
+        }
         list->head = list->head->next;
+        temp->next = list->head;
     }
     else
     {
-        Node *temp = list->head;
         for (int i = 0; i < index - 1; i++)
         {
             temp = temp->next;
         }
-        node = temp->next;
         temp->next = temp->next->next;
     }
-    free(node);
     list->size--;
-}
-
-//删除给定节点
-void deleteNode(LinkedList *list, Node *node)
-{
-    if (node == NULL)
-    {
-        return;
-    }
-    if (node == list->head)
-    {
-        list->head = list->head->next;
-    }
-    else
-    {
-        Node *temp = list->head;
-        while (temp != NULL && temp->next != node)
-        {
-            temp = temp->next;
-        }
-        if (temp != NULL)
-        {
-            temp->next = temp->next->next;
-        }
-    }
-    free(node);
-    list->size--;
+    return true;
 }
 
 int search(LinkedList *list, int data)
 {
     Node *temp = list->head;
     int index = 0;
-    while (temp != NULL)
+    while (temp->next != list->head)
     {
         if (temp->data == data)
         {
@@ -170,17 +121,39 @@ int search(LinkedList *list, int data)
         temp = temp->next;
         index++;
     }
+    if (temp->data == data)
+    {
+        return index;
+    }
     return -1;
 }
 
 void print(LinkedList *list)
 {
     Node *temp = list->head;
-    while (temp != NULL)
+    while (temp->next != list->head)
     {
         printf("%d ", temp->data);
         temp = temp->next;
     }
-    printf("\n");
+    printf("%d\n", temp->data);
 }
 
+int main()
+{
+    LinkedList list;
+    init(&list);
+    for (int i = 0; i < 10; i++)
+    {
+        add(&list, i + 1);
+    }
+    insert(&list, 0, 0);
+    insert(&list, 5, 5);
+    insert(&list, 12, 12);
+    delete(&list, 0);
+    delete(&list, 5);
+    delete(&list, 10);
+    printf("%d\n", search(&list, 6));
+    print(&list);
+    return 0;
+}

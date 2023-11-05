@@ -85,6 +85,12 @@ Poco：这是一个用于构建网络和基于互联网的应用程序的库。
 
 Google Test：这是一个用于 C++ 的单元测试框架。
 
+SFML：SFML是一个提供了一套简单接口的多媒体库，用于开发游戏和多媒体应用。
+
+用于机器学习的TensorFlow，用于深度学习的Caffe，用于科学计算的GSL（GNU Scientific Library）
+
+vcpkg包管理器
+
 **JSON for Modern C++**：这是一个用于处理 JSON 数据的现代 C++ 库。
 
 # 常用数据结构和算法
