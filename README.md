@@ -1,2 +1,2 @@
-# DataStructureAndAlgorithms
-用C、C++、Rust、Python分别实现每种数据结构和算法，后续可能会添加更多语言的实现。A implementation using C/C++/Rust/Python  respectively
+# Data structure and algorithms
+数据结构与算法分析，完全用C语言实现，参照了王道考研教材，完全覆盖考研要求。
