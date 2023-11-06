@@ -168,6 +168,7 @@ void selectSort(List *list)
     }
 }
 
+//堆排序
 void heapAdjust(List *list, int i, int length)
 {
     int temp = list->data[i];
@@ -190,6 +191,7 @@ void heapAdjust(List *list, int i, int length)
     list->data[i] = temp;
 }
 
+
 void heapSort(List *list)
 {
     for (int i = list->length / 2 - 1; i >= 0; i--)
@@ -203,6 +205,7 @@ void heapSort(List *list)
     }
 }
 
+//二路归并排序
 void merge(List *list, int low, int mid, int high)
 {
     int i = low;
@@ -247,6 +250,7 @@ void mergeSort(List *list, int low, int high)
     merge(list, low, mid, high);
 }
 
+//基数排序
 void radixSort(List *list)
 {
     int max = list->data[0];
@@ -296,5 +300,31 @@ void radixSort(List *list)
     }
     free(temp);
     free(order);
+}
+
+//外部排序
+void externalSort(List *list)
+{
+    FILE *fp = fopen("data.txt", "w");
+    for (int i = 0; i < list->length; i++)
+    {
+        fprintf(fp, "%d ", list->data[i]);
+    }
+    fclose(fp);
+    fp = fopen("data.txt", "r");
+    int *temp = (int *)malloc(sizeof(int) * list->length);
+    int count = 0;
+    while (fscanf(fp, "%d", &temp[count++]) != EOF)
+    {
+    }
+    fclose(fp);
+    mergeSort(list, 0, list->length - 1);
+    fp = fopen("data.txt", "w");
+    for (int i = 0; i < list->length; i++)
+    {
+        fprintf(fp, "%d ", list->data[i]);
+    }
+    fclose(fp);
+    free(temp);
 }
 

@@ -27,12 +27,65 @@ void init(Hashmap *hashmap)
     hashmap->size = 0;
 }
 
+//除留余数法
 int hash(int data)
 {
     return data % HASHSIZE;
 }
 
-void add(Hashmap *hashmap, int data)
+//直接定址法
+int hash2(int data)
+{
+    return data;
+}
+
+//平方取中法
+int hash3(int data)
+{
+    int temp = data * data;
+    temp = temp / 100 % 10000;
+    return temp;
+}
+
+//数字分析法
+int hash4(int data)
+{
+    int temp = data;
+    int sum = 0;
+    while (temp != 0)
+    {
+        sum += temp % 10;
+        temp /= 10;
+    }
+    return sum % HASHSIZE;
+}
+
+//折叠法
+int hash5(int data)
+{
+    int temp = data;
+    int sum = 0;
+    while (temp != 0)
+    {
+        sum += temp % 100;
+        temp /= 100;
+    }
+    return sum % HASHSIZE;
+}
+
+//开放定址法解决冲突
+int hash6(int data, int i)
+{
+    return (hash(data) + i) % HASHSIZE;
+}
+
+//拉链法解决冲突
+int hash7(int data)
+{
+    return hash(data);
+}
+
+void insert(Hashmap *hashmap, int data)
 {
     int index = hash(data);
     Node *node = (Node *)malloc(sizeof(Node));
@@ -54,71 +107,72 @@ void add(Hashmap *hashmap, int data)
     hashmap->size++;
 }
 
-void insert(Hashmap *hashmap, int index, int data)
-{
-    if (index < 0 || index > hashmap->size)
-    {
-        printf("index error\n");
-        return;
-    }
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->data = data;
-    node->next = NULL;
-    if (index == 0)
-    {
-        node->next = hashmap->nodes[index];
-        hashmap->nodes[index] = node;
-    }
-    else
-    {
-        Node *temp = hashmap->nodes[index - 1];
-        for (int i = 0; i < index - 1; i++)
-        {
-            temp = temp->next;
-        }
-        node->next = temp->next;
-        temp->next = node;
-    }
-    hashmap->size++;
-}
-
-void remove_node(Hashmap *hashmap, int data)
+Node *find(Hashmap *hashmap, int data)
 {
     int index = hash(data);
     Node *temp = hashmap->nodes[index];
-    if (temp == NULL)
+    while (temp != NULL)
     {
-        printf("data not found\n");
-        return;
-    }
-    if (temp->data == data)
-    {
-        hashmap->nodes[index] = temp->next;
-        free(temp);
-        hashmap->size--;
-        return;
-    }
-    while (temp->next != NULL && temp->next->data != data)
-    {
+        if (temp->data == data)
+        {
+            return temp;
+        }
         temp = temp->next;
     }
-    if (temp->next == NULL)
+    return NULL;
+}
+
+void delete(Hashmap *hashmap, int data)
+{
+    int index = hash(data);
+    Node *node = NULL;
+    if (hashmap->nodes[index] != NULL && hashmap->nodes[index]->data == data)
     {
-        printf("data not found\n");
-        return;
+        node = hashmap->nodes[index];
+        hashmap->nodes[index] = hashmap->nodes[index]->next;
     }
-    Node *node = temp->next;
-    temp->next = node->next;
-    free(node);
-    hashmap->size--;
+    else
+    {
+        Node *temp = hashmap->nodes[index];
+        while (temp->next != NULL)
+        {
+            if (temp->next->data == data)
+            {
+                node = temp->next;
+                temp->next = temp->next->next;
+                break;
+            }
+            temp = temp->next;
+        }
+    }
+    if (node != NULL)
+    {
+        free(node);
+        hashmap->size--;
+    }
+}
+
+void destroy(Hashmap *hashmap)
+{
+    for (int i = 0; i < HASHSIZE; i++)
+    {
+        Node *temp = hashmap->nodes[i];
+        while (temp != NULL)
+        {
+            Node *node = temp;
+            temp = temp->next;
+            free(node);
+        }
+    }
+    hashmap->size = 0;
 }
 
 void print(Hashmap *hashmap)
 {
     for (int i = 0; i < HASHSIZE; i++)
     {
+        printf("%d: ", i);
         Node *temp = hashmap->nodes[i];
-        printf("index %d: ", i);
         while (temp != NULL)
         {
             printf("%d ", temp->data);

@@ -184,3 +184,78 @@ void print(LinkedList *list)
     printf("\n");
 }
 
+//顺序查找
+Node *searchNode(LinkedList *list, int data)
+{
+    Node *temp = list->head;
+    while (temp != NULL)
+    {
+        if (temp->data == data)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+//折半查找
+Node *searchNode2(LinkedList *list, int data)
+{
+    Node *temp = list->head;
+    int low = 0;
+    int high = list->size - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        for (int i = 0; i < mid; i++)
+        {
+            temp = temp->next;
+        }
+        if (temp->data == data)
+        {
+            return temp;
+        }
+        else if (temp->data > data)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+        temp = list->head;
+    }
+    return NULL;
+}
+
+//分块查找
+Node *searchNode3(LinkedList *list, int data)
+{
+    Node *temp = list->head;
+    int low = 0;
+    int high = list->size - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        for (int i = 0; i < mid; i++)
+        {
+            temp = temp->next;
+        }
+        if (temp->data == data)
+        {
+            return temp;
+        }
+        else if (temp->data > data)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+        temp = list->head;
+    }
+    return NULL;
+}
+
